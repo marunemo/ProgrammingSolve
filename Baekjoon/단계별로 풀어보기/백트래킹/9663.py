@@ -15,17 +15,18 @@
 # 퀸의 개수 세는 함수 생성
 def queenCount(isQueenThere, queenLocation, column, n):
     # 마지막으로 배치한 퀸이 대각선으로 다른 퀸과 공격할 수 있을 경우, 그 경우는 제외한다.(조건 3.)
-    # y = -x 꼴의 대각선의 경우에 대한 퀸의 존재 가능 여부
-    r, c = queenLocation[column - 1], column - 1
-    while r >= 0 and c >= 0:
-        r, c = r - 1, c - 1
-        if r == queenLocation[c] and r >= 0 and c >= 0:
+    # 마지막으로 배치한 퀸의 열
+    lastColumn = column - 1
+    # y = -x 꼴의 대각선의 경우
+    rowUp = queenLocation[lastColumn]
+    # y = x 꼴의 대각선의 경우
+    rowDown = queenLocation[lastColumn]
+    # 각 대각선의 경우에 대한 존재 가능 여부
+    for c in range(lastColumn - 1, -1, -1):
+        rowUp, rowDown = rowUp - 1, rowDown + 1
+        if rowUp == queenLocation[c]:
             return 0
-    # y = x 꼴의 대각선의 경우에 대한 퀸의 존재 가능 여부
-    r, c = queenLocation[column - 1], column - 1
-    while r >= 0 and c >= 0:
-        r, c = r + 1, c - 1
-        if r == queenLocation[c] and r >= 0 and c >= 0:
+        if rowDown == queenLocation[c]:
             return 0
     
     # 만약 위 3.의 조건을 만족하는 퀸들이 n개를 만족할 경우 총 개수에 1을 추가한다.
