@@ -17,16 +17,14 @@ def queenCount(isQueenThere, queenLocation, column, n):
     # 마지막으로 배치한 퀸이 대각선으로 다른 퀸과 공격할 수 있을 경우, 그 경우는 제외한다.(조건 3.)
     # 마지막으로 배치한 퀸의 열
     lastColumn = column - 1
-    # y = -x 꼴의 대각선의 경우
-    rowUp = queenLocation[lastColumn]
-    # y = x 꼴의 대각선의 경우
-    rowDown = queenLocation[lastColumn]
+    # 마지막으로 배치한 퀸의 위치
+    lastRow = queenLocation[lastColumn]
     # 각 대각선의 경우에 대한 존재 가능 여부
     for c in range(lastColumn - 1, -1, -1):
-        rowUp, rowDown = rowUp - 1, rowDown + 1
-        if rowUp == queenLocation[c]:
-            return 0
-        if rowDown == queenLocation[c]:
+        # y = ±(x - lastColumn) + lastRow의 식을 만족하는 경우, 대각선으로 공격 가능하다.
+        # 이때, 각 식은 |y - lastRow| = |x - lastColumn|으로 나타낼 수 있고,
+        # x < lastColumn에 대해 |y - lastRow| = lastColumn - x로 나타낼 수 있으므로, 식은 다음과 같다.
+        if abs(queenLocation[c] - lastRow) == lastColumn - c:
             return 0
     
     # 만약 위 3.의 조건을 만족하는 퀸들이 n개를 만족할 경우 총 개수에 1을 추가한다.
