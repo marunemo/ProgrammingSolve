@@ -9,7 +9,15 @@
 00이라는 묶음이 하나 늘어날 때마다 수 묶음의 총 개수는 하나씩 줄어든다.
 '''
 
-from math import factorial
+# 팩토리얼 재귀 함수 생성
+def factorial(n):
+    global factorialList
+    if n not in factorialList:
+        factorialList[n] = n * factorial(n - 1)
+    return factorialList[n]
+
+# 메모이제이션
+factorialList = {0 : 1, 1 : 1}
 
 # 타일의 길이 입력
 n = int(input())
@@ -21,4 +29,5 @@ for i in range(n):
     # 전체 길이가 1씩 감소하고, 해당 전체 길이에 각 중복의 개수가 1씩 증감한다.
     total += factorial(n - i) // (factorial(i) * factorial(n - i - i))
 
-print(total)
+# 이진 수열의 개수를 15746으로 나눈 나머지 출력
+print(total % 15746)
