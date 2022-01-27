@@ -9,6 +9,10 @@
 00이라는 묶음이 하나 늘어날 때마다 수 묶음의 총 개수는 하나씩 줄어든다.
 '''
 
+# 최대 재귀 회수 확장
+from sys import setrecursionlimit
+setrecursionlimit(3000000)
+
 # 팩토리얼 재귀 함수 생성
 def factorial(n):
     global factorialList
