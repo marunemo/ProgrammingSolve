@@ -16,15 +16,18 @@ f(n) = (1) ^ f(n - 1) + (00) ^ f(n - 2)
 이때, f(n - 2)는 n이 1 또는 2 모두에 도달 가능하므로, f(n)은 존재한다.
 '''
 
+# fast IO
+from sys import stdin
+
 # 타일 가짓수 탐색
 def countTile(n):
     a, b = 1, 2
     for i in range(n - 1):
-        a, b = b, a + b
+        # 이진 수열의 개수를 15746으로 나눈 나머지
+        a, b = b % 15746, (a + b) % 15746
     return a
 
 # 타일의 길이 입력
-n = int(input())
+n = int(stdin.readline())
 
-# 이진 수열의 개수를 15746으로 나눈 나머지 출력
-print(countTile(n) % 15746)
+print(countTile(n))
