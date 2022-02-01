@@ -19,9 +19,10 @@ input = stdin.readline
 height = int(input())
 
 # 삼각형의 각 층까지 만들어질 수 있는 최댓값
-triangleSum = []
+triangleSum = [0]
 
-for level in range(height):
+# 각 줄을 1부터 셈함 (각 줄의 인덱스의 편의를 위함)
+for level in range(1, height + 1):
     # 각 줄에서의 삼각형의 숫자
     intList = list(map(int, input().split()))
 
