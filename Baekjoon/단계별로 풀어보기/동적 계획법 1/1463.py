@@ -22,7 +22,7 @@ def calcX(x):
         while mod2 % 2 == 0:
             mod2 //= 2
             mod2Cnt += 1
-        count.append(calcX(x // 2) + 1)
+        count.append(calcX(mod2) + mod2Cnt)
 
     # x를 1로 뺐을 때 3이나 2의 배수가 아니라면, 연산 횟수를 크게 줄이지 못하므로 무시한다.
     x -= 1
