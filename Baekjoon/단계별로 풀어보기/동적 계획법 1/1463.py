@@ -1,37 +1,29 @@
-def calcX(x):
-    # x가 1이 되었을 때부터 연산 횟수를 세기 시작한다.
-    if x == 1:
-        return 0
+'''
+정수 X에 사용할 수 있는 연산은 다음과 같이 세 가지이다.
+    1. X가 3으로 나누어 떨어지면, 3으로 나눈다.
+    2. X가 2로 나누어 떨어지면, 2로 나눈다.
+    3. 1을 뺀다.
+'''
+import sys
 
-    # 각 경우의 최솟값을 구한다.
-    count = []
+# 연산 횟수를 구할 n을 입력 받음
+n = int(sys.stdin.readline())
 
-    # x가 3으로 나누어 떨어지면 3의 배수가 아닐 때까지 3으로 나누고, 해당 횟수를 더한다.
-    if x % 3 == 0:
-        mod3 = x
-        mod3Cnt = 0
-        while mod3 % 3 == 0:
-            mod3 //= 3
-            mod3Cnt += 1
-        count.append(calcX(mod3) + mod3Cnt)
+# 0번째 인덱스는 인덱스를 해당 숫자와 동일하게 하기 위해 추가
+calcCount = [0, 0]
 
-    # x가 2으로 나누어 떨어지면 2의 배수가 아닐 때까지 2으로 나누고, 해당 횟수를 더한다.
-    if x % 2 == 0:
-        mod2 = x
-        mod2Cnt = 0
-        while mod2 % 2 == 0:
-            mod2 //= 2
-            mod2Cnt += 1
-        count.append(calcX(mod2) + mod2Cnt)
+# 2부터 n까지 총 연산 횟수를 구함(탑다운 알고리즘)
+for i in range(2, n + 1):
+    # 기본적으로 X는 (X - 1)번째의 연산 횟수 + 1로 계산 (연산 3. 이용)
+    calcCount.append(calcCount[i - 1] + 1)
 
-    # x를 1로 뺐을 때 3이나 2의 배수가 아니라면, 연산 횟수를 크게 줄이지 못하므로 무시한다.
-    x -= 1
-    if x % 3 == 0 or x % 2 == 0:
-        count.append(calcX(x) + 1)
-    
-    # 짝수는 x 또는 x - 1 중 하나에 반드시 존재하므로, count가 빈 리스트가 될 수는 없다.
-    return min(count)
+    # 만약 X가 3의 배수라면 해당 횟수 + 1로 계산 (연산 1. 이용)
+    if i % 3 == 0 and calcCount[i] > calcCount[i // 3] + 1:
+        calcCount[i] = calcCount[i // 3] + 1
 
-# n을 입력받아 연산 횟수를 출력한다.
-n = int(input())
-print(calcX(n))
+    # 만약 x가 2의 배수라면 해당 횟수 + 1로 계산 (연산 2. 이용)
+    if i % 2 == 0 and calcCount[i] > calcCount[i // 2] + 1:
+        calcCount[i] = calcCount[i // 2] + 1
+
+# n번째 인덱스의 최종 결과인 최소 연산 횟수를 출력
+print(calcCount[n])
