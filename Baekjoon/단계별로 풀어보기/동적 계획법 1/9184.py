@@ -1,28 +1,35 @@
-'''
-풀이
+import sys
+sys.setrecursionlimit(10000)
 
-다음과 같은 재귀함수 w(a, b, c)가 있다.
-if a <= 0 or b <= 0 or c <= 0, then w(a, b, c) returns:
-    1
+def w(a, b, c):
+    global memo
 
-if a > 20 or b > 20 or c > 20, then w(a, b, c) returns:
-    w(20, 20, 20)
+    if a <= 0 or b <= 0 or c <= 0:
+        return 1
 
-if a < b and b < c, then w(a, b, c) returns:
-    w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c)
+    if a > 20 or b > 20 or c > 20:
+        return w(20, 20, 20)
 
-otherwise it returns:
-    w(a-1, b, c) + w(a-1, b-1, c) + w(a-1, b, c-1) - w(a-1, b-1, c-1)
+    # 각 a, b, c에 따른 결과를 메모이제이션
+    if memo[a][b][c] == 0:
+        if a < b and b < c:
+            memo[a][b][c] = w(a, b, c - 1) + w(a, b - 1, c - 1) - w(a, b - 1, c)
+        else:
+            memo[a][b][c] = w(a - 1, b, c) + w(a - 1, b - 1, c) + w(a - 1, b, c - 1) - w(a - 1, b - 1, c - 1)
 
-이를 해석하면
-1. a, b, c 중 하나 이상 0 또는 음수가 있다면 1을 반환한다.
-2. a, b, c 중 하나 이상 20 이상의 수가 있다면 전부 20으로 초기화한다.
-3. a, b, c가 오름차순이라면, w(a, b, c-1) + w(a, b-1, c-1) - w(a, b-1, c)을 실행한다.
-4. 그 외의 경우, w(a-1, b, c) + w(a-1, b-1, c) + w(a-1, b, c-1) - w(a-1, b-1, c-1)을 실행한다.
-로 나타낼 수 있다.
+    return memo[a][b][c]
 
-이로써 유추할 수 있는 것은 결국 값을 결정하는 것은 1.의 값 1이므로, a, b, c 중 하나 이상이 0 또는 음수가 되는 경우들만 고려하면 된다.
+# memo = [[[0] * 21] * 21] * 21는 주소 복사(shallow copy)가 발생하므로, 부적절한 사용
+memo = [[([0] * 21) for _ in range(21)] for _ in range(21)]
 
-여기서 알 수 있는 내용들을 나열해본다.
-- b >= c 인 경우, 
-'''
+# -1 -1 -1이 나오기 전까지 입력받음
+inputList = []
+while True:
+    abc = list(map(int, sys.stdin.readline().split()))
+    if abc == [-1, -1, -1]:
+        break
+    inputList.append(abc)
+
+# 포맷에 맞게 각 결과 출력
+for a, b, c in inputList:
+    print("w({0}, {1}, {2}) = {3}".format(a, b, c, w(a, b, c)))
