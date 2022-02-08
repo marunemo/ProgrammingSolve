@@ -71,7 +71,10 @@ else:
     for i in range(channelLength - 1):
         belowNearChannel = belowNearChannel * 10 + availableBtn[-1]
     for i in range(channelLength + 1):
-        aboveNearChannel = aboveNearChannel * 10 + (availableBtn[0] if availableBtn[0] != 0 or len(n) == 1 else availableBtn[1])
+        if availableBtn[0] == 0 and len(availableBtn) != 1:
+            aboveNearChannel = aboveNearChannel * 10 + availableBtn[1]
+        else:
+            aboveNearChannel = aboveNearChannel * 10 + availableBtn[0]
 
     # 채널로부터의 떨어진 거리(+이나 -를 누르는 횟수)를 비교하여 최솟값을 출력한다.
     # 이때, 시작 채널인 100부터의 거리도 고려한다.
