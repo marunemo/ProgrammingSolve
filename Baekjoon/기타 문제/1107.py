@@ -68,8 +68,11 @@ else:
     aboveNearChannel = 0
 
     # 이때, 자리수가 작은 채널은 최댓값을, 자리수가 큰 채널은 최솟값을 고려한다.
-    for i in range(channelLength - 1):
-        belowNearChannel = belowNearChannel * 10 + availableBtn[-1]
+    if channelLength == 1:
+        belowNearChannel = availableBtn[0]
+    else:
+        for i in range(channelLength - 1):
+            belowNearChannel = belowNearChannel * 10 + availableBtn[-1]
     for i in range(channelLength + 1):
         if availableBtn[0] == 0 and len(availableBtn) != 1:
             aboveNearChannel = aboveNearChannel * 10 + availableBtn[1]
