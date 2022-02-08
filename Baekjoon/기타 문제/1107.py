@@ -24,7 +24,7 @@ if m == 0:
 else:
     brokenBtn = list(map(int, input().split()))
 
-if m == 9:
+if m == 10:
     # 누를 수 있는 채널이 없다면 +나 -로 이동하는 방법만 고려하면 된다.
     minCount = abs(int(n) - 100)
 else:
@@ -51,13 +51,16 @@ else:
         # 만약 누를 수 없는 버튼이 있다면, 대신 그 버튼과 가장 가까이에 있는 버튼을 누른다.
         else:
             i = 0
-            while availableBtn[i] < digitNum and i < len(availableBtn) - 1:
+            while i < len(availableBtn) and availableBtn[i] < digitNum:
                 i += 1
-            if availableBtn[i] > digitNum:
-                smNearChannel = smNearChannel * 10 + availableBtn[i - 1]
-            else:
+            if i == 0:
                 smNearChannel = smNearChannel * 10 + availableBtn[i]
-            lgNearChannel = lgNearChannel * 10 + availableBtn[i]
+            else:
+                smNearChannel = smNearChannel * 10 + availableBtn[i - 1]
+            if i == len(availableBtn):
+                lgNearChannel = lgNearChannel * 10 + availableBtn[i - 1]
+            else:
+                lgNearChannel = lgNearChannel * 10 + availableBtn[i]
             isBroken = True
 
     # 채널의 자리수보다 1 크고 작은 채널도 고려한다.
@@ -74,10 +77,10 @@ else:
     # 이때, 시작 채널인 100부터의 거리도 고려한다.
     n = int(n)
     availableCase = []
-    availableCase.append(abs(n - smNearChannel) + channelLength)
-    availableCase.append(abs(lgNearChannel - n) + channelLength)
-    availableCase.append(abs(n - belowNearChannel) + (channelLength - 1))
-    availableCase.append(abs(aboveNearChannel - n) + (channelLength + 1))
+    availableCase.append(abs(n - smNearChannel) + len(str(smNearChannel)))
+    availableCase.append(abs(lgNearChannel - n) + len(str(lgNearChannel)))
+    availableCase.append(abs(n - belowNearChannel) + len(str(belowNearChannel)))
+    availableCase.append(abs(aboveNearChannel - n) + len(str(aboveNearChannel)))
     availableCase.append(abs(n - 100))
 
     # 각 거리의 최솟값을 출력한다.
