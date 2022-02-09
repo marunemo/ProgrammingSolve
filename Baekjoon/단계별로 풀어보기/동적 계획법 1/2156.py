@@ -41,7 +41,7 @@ for i in range(n):
     elif i == 1:
         maxGlasses.append(glass[i] + glass[i - 1])
     elif i == 2:
-        maxGlasses.append(glass[i] + maxGlasses[i - 2])
+        maxGlasses.append(max(glass[i] + maxGlasses[i - 2], glass[i] + glass[i - 1]))
     else:
         maxGlasses.append(max(glass[i] + maxGlasses[i - 2], glass[i] + glass[i - 1] + maxGlasses[i - 3]))
 
