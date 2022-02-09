@@ -73,6 +73,8 @@ for i in range(n):
         maxGlasses.append([max(oneJumpGlass, twoJumpGlass), continuousGlass])
 
 # 최대로 마실 수 있는 포도주의 양을 출력
-lastGlass = max(maxGlasses[-1])
-last2Glass = max(maxGlasses[-2])
-print(max(lastGlass, last2Glass))
+maxWine = []
+maxWine.extend(maxGlasses[-1])
+if n != 1:
+    maxWine.extend(maxGlasses[-2])
+print(max(maxWine))
