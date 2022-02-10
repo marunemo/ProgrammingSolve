@@ -20,12 +20,13 @@ vertice, edge = map(int, input().split())
 k = int(input())
 
 # adjacency matrix 생성 (인덱스의 위치를 맞추기 위해 0번 빈 인덱스 추가)
-adjMatrix = [[] for _ in range(vertice + 1)]
+adjMatrix = [{} for _ in range(vertice + 1)]
 
 # adjacency matrix에 간선 추가
 for _ in range(edge):
     u, v, w = map(int, input().split())
-    adjMatrix[u].append([v, w])
+    if v not in adjMatrix[u] or adjMatrix[u][v] > w:
+        adjMatrix[u][v] = w
 
 # 첫째 줄부터 V개의 줄에 걸쳐, i번째 줄에 i번 정점으로의 최단 경로의 경로값을 출력
 for i in range(1, vertice + 1):
@@ -41,7 +42,9 @@ for i in range(1, vertice + 1):
         weight, u = heapq.heappop(minPath)
 
         # 현재 위치에서의 간선에 대한 도착 정점과 가중치 저장
-        for v, w in adjMatrix[u]:
+        for v, w in adjMatrix[u].items():
+            if v not in adjMatrix[k] or adjMatrix[k][v] > weight + w:
+                adjMatrix[k][v] = weight + w
             heapq.heappush(minPath, [weight + w, v])
     
     # 만약 더이상 이동할 수 없었다면 경로가 존재하지 않는 것으로 간주
