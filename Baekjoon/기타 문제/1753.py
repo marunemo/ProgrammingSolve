@@ -8,6 +8,11 @@ adjacency matrix가 주어졌을 때, 그래프 내에서 갈 수 있는 최단 
 (1차 수정)
 결국 모든 정점에서 구할 필요 없이 하나의 정점에서 갈 수 있는 모든 경우를 구하면 되므로,
 각 정점으로 가는 방법을 각각의 경우에 대해서 구하는 것이 아닌 한 번에 모든 정점으로의 가중치를 구하는 방법이 가장 효율적이다.
+
+(2차 수정)
+결국 한 정점으로 갔던 거리가 이전 거리와 비교하여 최단 거리가 아니라면,
+새로 추가하더라도 최단 거리가 될 수 없으므로 결과를 무시하는 것이 효율성을 크게 높히는 데에 도움이 된다.
+(예외적으로 가중치가 음의 값을 가지는 경우라면 무시할 수 없다(그 경우라면 다익스트라 알고리즘 자체를 써서는 안된다))
 '''
 
 # fast IO
@@ -50,7 +55,7 @@ while daikstra:
     for v, w in adjMatrix[u].items():
         if minPath[v] == "INF" or minPath[v] > weight + w:
             minPath[v] = weight + w
-        heapq.heappush(daikstra, [weight + w, v])
+            heapq.heappush(daikstra, [weight + w, v])
 
 # 각 최단 경로나 발견되지 않은 경로 출력
 for weight in minPath[1:]:
