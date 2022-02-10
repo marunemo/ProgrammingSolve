@@ -3,7 +3,11 @@
 
 전형적인 다익스트라 알고리즘 문제이다.
 
-adjacency matrix가 주어졌을 때, 그래프 내에서 갈 수 있는 최단 거리를 구하는 문제이다. 
+adjacency matrix가 주어졌을 때, 그래프 내에서 갈 수 있는 최단 거리를 구하는 문제이다.
+
+(1차 수정)
+결국 모든 정점에서 구할 필요 없이 하나의 정점에서 갈 수 있는 모든 경우를 구하면 되므로,
+각 정점으로 가는 방법을 각각의 경우에 대해서 구하는 것이 아닌 한 번에 모든 정점으로의 가중치를 구하는 방법이 가장 효율적이다.
 '''
 
 # fast IO
@@ -28,28 +32,26 @@ for _ in range(edge):
     if v not in adjMatrix[u] or adjMatrix[u][v] > w:
         adjMatrix[u][v] = w
 
-# 첫째 줄부터 V개의 줄에 걸쳐, i번째 줄에 i번 정점으로의 최단 경로의 경로값을 출력
-for i in range(1, vertice + 1):
-    # weight 0과 첫 시작 정점인 k로 초기화
-    minPath = [[0, k]]
+# 1부터 vertice까지의 모든 최단 경로 저장
+minPath = ["INF" for _ in range(vertice + 1)]
 
-    # 현재 위치 초기화 (인덱스가 0인 정점은 존재하지 않음)
-    u = 0
-
-    # 현재 위치가 목표 위치에 도달했거나 더이상 이동할 수 없을 때까지 반복
-    while u != i and minPath:
-        # 가중치와 현재 위치 불러오기
-        weight, u = heapq.heappop(minPath)
-
-        # 현재 위치에서의 간선에 대한 도착 정점과 가중치 저장
-        for v, w in adjMatrix[u].items():
-            if v not in adjMatrix[k] or adjMatrix[k][v] > weight + w:
-                adjMatrix[k][v] = weight + w
-            heapq.heappush(minPath, [weight + w, v])
+# 시작점 자신은 0으로 초기화
+minPath[k] = 0
     
-    # 만약 더이상 이동할 수 없었다면 경로가 존재하지 않는 것으로 간주
-    if not minPath:
-        print("INF")
-    # 그렇지 않으면 최단 경로 출력
-    else:
-        print(weight)
+# weight 0과 첫 시작 정점인 k로 초기화
+daikstra = [[0, k]]
+
+# 더이상 경로를 탐색할 수 없을 때까지 반복
+while daikstra:
+    # 가중치와 현재 위치 불러오기
+    weight, u = heapq.heappop(daikstra)
+
+    # 현재 위치에서의 간선에 대한 도착 정점과 가중치 저장
+    for v, w in adjMatrix[u].items():
+        if minPath[v] == "INF" or minPath[v] > weight + w:
+            minPath[v] = weight + w
+        heapq.heappush(daikstra, [weight + w, v])
+
+# 각 최단 경로나 발견되지 않은 경로 출력
+for weight in minPath[1:]:
+    print(weight)
