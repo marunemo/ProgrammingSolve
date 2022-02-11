@@ -55,8 +55,8 @@ for i in range(10):
 # 각 테스트 케이스에 대해 마지막 데이터가 처리되는 컴퓨터의 번호를 출력
 for a, b in dataAmount:
     digit = a % 10
-    digitIndex = (b - 1) % len(digitList[a])
+    digitIndex = (b - 1) % len(digitList[digit])
     if digit == 0:
         print(10)
     else:
-        print(digitList[a][digitIndex])
+        print(digitList[digit][digitIndex])
