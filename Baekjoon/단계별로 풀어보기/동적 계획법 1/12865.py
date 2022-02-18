@@ -6,7 +6,30 @@ DP의 대표적인 문제인 냅색 문제이다. (배낭 문제라고도 한다
 W의 합이 K 이하가 되도록 하면서 V의 합이 최대가 되도록 하는 결과를 찾으면 된다.
 
 처음부터 각 무게들의 합으로 나타낼 수 있는 무게들의 최대 가치를 저장한다면 어떨까?
+
+(1차 수정)
+냅색 문제에 대한 이해가 필요하여 다음 사이트를 참고하였다.
+(https://namu.wiki/w/%EB%B0%B0%EB%82%AD%20%EB%AC%B8%EC%A0%9C)
+(https://www.youtube.com/watch?v=A8nOpWRXQrs)
 '''
+
+# 냅색 문제 알고리즘 (https://www.youtube.com/watch?v=A8nOpWRXQrs 참고)
+def knapsack(index, maxWeight, packingItem):
+    # 만약 아이템이 더이상 없거나 저장할 수 있는 무게가 없다면 취소
+    if index < 0 or maxWeight <= 0:
+        return 0
+    
+    # 무게와 가치를 불러옴
+    weight, value = packingItem[index]
+
+    # 만약 현재 인덱스의 무게가 최대 무게 이상이라면 다음 무게로 넘어감
+    if weight > maxWeight:
+        return knapsack(index - 1, maxWeight, packingItem)
+    else:
+        # 해당 인덱스의 물건을 포함하는 경우와 포함하지 않는 경우 중 최댓값을 반환
+        notContainMax = knapsack(index - 1, maxWeight, packingItem)
+        containMax = value + knapsack(index - 1, maxWeight - weight, packingItem)
+        return max(notContainMax, containMax)
 
 # fast IO
 from sys import stdin
@@ -16,30 +39,13 @@ input = stdin.readline
 n, k = map(int, input().split())
 
 # 각 물품들을 저장할 딕셔너리 생성
-packing = {}
+packing = []
 for _ in range(n):
     w, v = map(int, input().split())
+    packing.append([w, v])
 
-    # 처음 들어가는 무게에 대하여 중복하여 세지 않도록 설정
-    isdupl = False
-    if w not in packing:
-        packing[w] = v
-        isdupl = True
+# 물건을 무게 또는 가치 기준으로 정렬
+packing.sort()
 
-    # 각 무게를 내림차순으로 정렬(계산된 무게가 뒤에서 한 번 더 계산되는 것을 방지)
-    for i in sorted(packing.keys(), reverse=True):
-        # 만약 현재 가치가 중복으로 계산될 수 있다면 계산하지 않음
-        if isdupl and i == w:
-            continue
-
-        # 만약 해당 무게를 더했을 때에도 k값 이내라면, 가치의 최대값으로 수정
-        if i + w <= k:
-            if (i + w) not in packing or packing[i + w] < packing[i] + v:
-                packing[i + w] = packing[i] + v
-    
-    # 해당 무게의 가치를 최대값으로 수정
-    if packing[w] < v:
-        packing[w] = v
-
-# k에 가장 가까운 무게의 가치의 합을 출력
-print(packing[max(packing.keys())])
+# 가치의 합의 최댓값을 반환
+print(knapsack(n - 1, k, packing))
