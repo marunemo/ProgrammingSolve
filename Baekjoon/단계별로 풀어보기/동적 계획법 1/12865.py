@@ -44,8 +44,5 @@ for _ in range(n):
     w, v = map(int, input().split())
     packing.append([w, v])
 
-# 물건을 무게 또는 가치 기준으로 정렬
-packing.sort()
-
 # 가치의 합의 최댓값을 반환
 print(knapsack(n - 1, k, packing))
