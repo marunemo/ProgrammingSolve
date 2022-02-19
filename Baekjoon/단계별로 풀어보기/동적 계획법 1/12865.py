@@ -15,6 +15,8 @@ W의 합이 K 이하가 되도록 하면서 V의 합이 최대가 되도록 하�
 
 # 냅색 문제 알고리즘 (https://www.youtube.com/watch?v=A8nOpWRXQrs 참고)
 def knapsack(index, maxWeight, packingItem):
+    global itemTable
+
     # 만약 아이템이 더이상 없거나 저장할 수 있는 무게가 없다면 취소
     if index < 0 or maxWeight <= 0:
         return 0
@@ -22,14 +24,19 @@ def knapsack(index, maxWeight, packingItem):
     # 무게와 가치를 불러옴
     weight, value = packingItem[index]
 
-    # 만약 현재 인덱스의 무게가 최대 무게 이상이라면 다음 무게로 넘어감
-    if weight > maxWeight:
-        return knapsack(index - 1, maxWeight, packingItem)
-    else:
-        # 해당 인덱스의 물건을 포함하는 경우와 포함하지 않는 경우 중 최댓값을 반환
-        notContainMax = knapsack(index - 1, maxWeight, packingItem)
-        containMax = value + knapsack(index - 1, maxWeight - weight, packingItem)
-        return max(notContainMax, containMax)
+    # 메모이제이션 확인
+    if itemTable[index][maxWeight] == 0:
+        # 만약 현재 인덱스의 무게가 최대 무게 이상이라면 다음 무게로 넘어감
+        if weight > maxWeight:
+            itemTable[index][maxWeight] = knapsack(index - 1, maxWeight, packingItem)
+        else:
+            # 해당 인덱스의 물건을 포함하는 경우와 포함하지 않는 경우 중 최댓값을 반환
+            notContainMax = knapsack(index - 1, maxWeight, packingItem)
+            containMax = value + knapsack(index - 1, maxWeight - weight, packingItem)
+            itemTable[index][maxWeight] = max(notContainMax, containMax)
+
+    # 해당 경우에서의 가치합의 최댓값 출력
+    return itemTable[index][maxWeight]
 
 # fast IO
 from sys import stdin
@@ -43,6 +50,9 @@ packing = []
 for _ in range(n):
     w, v = map(int, input().split())
     packing.append([w, v])
+
+# 메모이제이션 (n × k)
+itemTable = [([0] * (k + 1)) for _ in range(n)]
 
 # 가치의 합의 최댓값을 반환
 print(knapsack(n - 1, k, packing))
