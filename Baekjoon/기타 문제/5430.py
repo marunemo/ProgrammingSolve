@@ -63,6 +63,6 @@ for _ in range(testcase):
         arr = arr[dequeue:arrCount - pop]
         resultList.append(arr[::(-1 if isReversed else 1)])
 
-# 결과 차례로 출력
+# 결과 차례로 출력(쉼표 사이 공백 제거)
 for result in resultList:
-    print(result)
+    print(str(result).replace(" ", ""))
