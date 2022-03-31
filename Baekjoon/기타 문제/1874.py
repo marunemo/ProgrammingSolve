@@ -70,7 +70,8 @@ for seqIndex in randomSeq:
     while top > 0 and seqVisited[top]:
         top -= 1
     if top == 0 and seqIndex != lastIndex:
-        top = maxTop + 1
+        maxTop += 1
+        top = maxTop
         operationSeq += "+"
 
 # 불가능 여부 및 연산 순서 출력
