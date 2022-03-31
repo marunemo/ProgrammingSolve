@@ -14,6 +14,14 @@ push에서는 불가능한 경우가 나타나지 않는다. 스택의 top보다
 즉, 마지막 인덱스가 현재 출력해야 하는 인덱스의 값보다 차가 1보다 큰 값으로 작아지게 된다면, 임의의 수열대로의 출력이 불가능해진다는 것이다.
 
 이 점을 고려하여 리스트에 입력 및 삭제되는 방식을 구현해본다면 다음과 같다.
+
+(1차 수정)
+시간초과가 발생하여 코드의 수정이 필요해졌다.
+생각해보면 방문되지 않은 최소 인덱스는 항상 (push된 인덱스 중 최댓값 + 1)를 push한 것과 같아진다는 것을 알게 되었다.
+방문되지 않은 최소 인덱스를 찾아가는 경우는 pop을 하다보니 결국 0의 인덱스에 도달하는 경우인데, 이는 즉 현재 스택에 데이터가 없다는 것이다.
+그렇다면 0에 도달했지만 0과 push된 인덱스 중 최댓값 사이에 데이터가 있는 경우는 없는가에 대한 문제가 발생한다.
+하지만 pop을 통해 0에 도달하기 전에 데이터가 있다면, 무조건 불가능 혹은 pop이 이루어질 수 밖에 없다.
+결론적으로 0의 인덱스가 도달하는 경우는 push된 인덱스 중 최댓값부터 0까지 데이터 없는 경우 밖에 없는 것이다.
 '''
 
 # fast IO
@@ -28,52 +36,42 @@ randomSeq = [int(input()) for _ in range(numCount)]
 
 # pop 여부를 확인할 데이터 세트와 스택의 top을 표시할 변수 생성
 seqVisited = {(i + 1) : False for i in range(numCount)}
-index = 1
+top = 1
 
 # push되었던 최댓값 저장
-maxIndex = 1
+maxTop = 1
 
 # 최종적으로 출력될 연산 생성(무조건 1을 거치므로, +로 시작)
 operationSeq = "+"
 
 # 임의의 수열을 첫 원소부터 찾아가며, 불가능 여부 탐색 및 연산 순서 저장
 flag = False
+lastIndex = randomSeq[-1]
 for seqIndex in randomSeq:
-    if index < seqIndex:
+    if top < seqIndex:
         # 목표 인덱스와 같아질 때까지 push하는 것으로 간주(연산 추가)
-        while index < seqIndex:
-            if not seqVisited[index]:
+        while top < seqIndex:
+            if not seqVisited[top]:
                 operationSeq += "+"
-            index += 1
+            top += 1
         
         # 최대 인덱스 갱신
-        if index > maxIndex:
-            maxIndex = index
+        if top > maxTop:
+            maxTop = top
     else:
-        # pop되지 않은 마지막 인덱스와 만날 때까지 탐색
-        while index > 0 and seqVisited[index]:
-            index -= 1
-
         # 만약 스택의 top이 현재 출력해야할 원소와 다르다면, 불가능으로 간주
-        if index != seqIndex:
+        if top != seqIndex:
             flag = True
             break
 
     # 현재 인덱스와 같을 경우, 방문되지 않은 최소 인덱스로 이동 및 연산 추가(pop)
-    seqVisited[index] = True
+    seqVisited[top] = True
     operationSeq += "-"
-    while index > 0 and seqVisited[index]:
-        index -= 1
-    if index == 0:
-        index += 1
-        while index < numCount and seqVisited[index]:
-            if index >= maxIndex:
-                operationSeq += "+"
-            index += 1
-
-        # 최대 인덱스 갱신
-        if index > maxIndex:
-            maxIndex = index
+    while top > 0 and seqVisited[top]:
+        top -= 1
+    if top == 0 and seqIndex != lastIndex:
+        top = maxTop + 1
+        operationSeq += "+"
 
 # 불가능 여부 및 연산 순서 출력
 if flag:
