@@ -9,6 +9,7 @@ def isPrime(n):
 def awesomePrime(num, digit, n):
     if digit == n:
         print(num)
+        return
 
     num *= 10
     for i in [1, 3, 7, 9]:
