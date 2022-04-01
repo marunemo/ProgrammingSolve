@@ -6,22 +6,23 @@ def isPrime(n):
             return False
     return True
 
-def primePair(numCount, numList, isVisited, firstIndex, resultPair):
-    if firstIndex == numCount:
+def primePair(numCount, numList, isVisited, visitCount, firstIndex, resultPair):
+    if visitCount == numCount:
         return all(isVisited.values())
 
     if isVisited[firstIndex]:
-        result = primePair(numCount, numList, isVisited, firstIndex + 1, resultPair)
+        result = primePair(numCount, numList, isVisited, visitCount, firstIndex + 1, resultPair)
         return result
 
     isVisited[firstIndex] = True
+    visitCount += 1
 
     isAllPaired = False
     for i in range(firstIndex + 1, numCount):
         if not isVisited[i]:
             if isPrime(numList[firstIndex] + numList[i]):
                 isVisited[i] = True
-                isAllPaired = primePair(numCount, numList, isVisited, firstIndex + 1, resultPair)
+                isAllPaired = primePair(numCount, numList, isVisited, visitCount + 1, firstIndex + 1, resultPair)
                 isVisited[i] = False
                 if isAllPaired:
                     if firstIndex == 0:
@@ -38,10 +39,11 @@ numCount = int(input())
 numList = list(map(int, input().split()))
 
 isVisited = {i : False for i in range(numCount)}
+visitCount = 0
 firstIndex = 0
 resultPair = []
 
-primePair(numCount, numList, isVisited, firstIndex, resultPair)
+primePair(numCount, numList, isVisited, visitCount, firstIndex, resultPair)
 if resultPair:
     print(*sorted(resultPair))
 else:
