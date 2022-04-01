@@ -1,4 +1,5 @@
 from math import sqrt
+from sys import stdin
 
 def isPrime(n):
     for i in range(2, int(sqrt(n)) + 1):
@@ -6,45 +7,48 @@ def isPrime(n):
             return False
     return True
 
-def primePair(numCount, numList, isVisited, visitCount, firstIndex, resultPair):
-    if visitCount == numCount:
-        return all(isVisited.values())
+def primePair(numCount, numList, isVisited, adjacencyList, index):
+    if index == numCount:
+        return True
 
-    if isVisited[firstIndex]:
-        result = primePair(numCount, numList, isVisited, visitCount, firstIndex + 1, resultPair)
-        return result
+    if isVisited[index]:
+        return primePair(numCount, numList, isVisited, adjacencyList, index + 1)
+    
+    isVisited[index] = True
+    for vertex in adjacencyList[index]:
+        if not isVisited[vertex]:
+            isVisited[vertex] = True
+            if primePair(numCount, numList, isVisited, adjacencyList, index + 1):
+                isVisited[index] = False
+                isVisited[vertex] = False
+                return True
+            isVisited[vertex] = False
+    isVisited[index] = False
+    return False
+    
 
-    isVisited[firstIndex] = True
-    visitCount += 1
-
-    isAllPaired = False
-    for i in range(firstIndex + 1, numCount):
-        if not isVisited[i]:
-            if isPrime(numList[firstIndex] + numList[i]):
-                isVisited[i] = True
-                isAllPaired = primePair(numCount, numList, isVisited, visitCount + 1, firstIndex + 1, resultPair)
-                isVisited[i] = False
-                if isAllPaired:
-                    if firstIndex == 0:
-                        resultPair.append(numList[i])
-                    else:
-                        isVisited[firstIndex] = False
-                        return isAllPaired
-        isAllPaired = False
-
-    isVisited[firstIndex] = False
-    return isAllPaired
-
-numCount = int(input())
-numList = list(map(int, input().split()))
+numCount = int(stdin.readline())
+numList = list(map(int, stdin.readline().split()))
 
 isVisited = {i : False for i in range(numCount)}
-visitCount = 0
-firstIndex = 0
-resultPair = []
 
-primePair(numCount, numList, isVisited, visitCount, firstIndex, resultPair)
-if resultPair:
-    print(*sorted(resultPair))
+adjacencyList = {i : [] for i in range(numCount)}
+
+for i in range(numCount):
+    for j in range(i + 1, numCount):
+        if isPrime(numList[i] + numList[j]):
+            adjacencyList[i].append(j)
+
+primeSet = []
+
+isVisited[0] = True
+for vertex in adjacencyList[0]:
+    isVisited[vertex] = True
+    if primePair(numCount, numList, isVisited, adjacencyList, 1):
+        primeSet.append(numList[vertex])
+    isVisited[vertex] = False
+
+if primeSet:
+    print(*sorted(primeSet))
 else:
     print(-1)
