@@ -11,7 +11,7 @@ def awesomePrime(num, digit, n):
         print(num)
 
     num *= 10
-    for i in range(10):
+    for i in [1, 3, 7, 9]:
         if isPrime(num + i):
             awesomePrime(num + i, digit + 1, n)
 
