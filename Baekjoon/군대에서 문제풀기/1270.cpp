@@ -6,6 +6,11 @@
 using namespace std;
 
 int main() {
+    // fast IO 코드
+    cin.tie(0);
+    cout.tie(0);
+    ios_base::sync_with_stdio(false);
+    
     int n;
     cin >> n;
     
