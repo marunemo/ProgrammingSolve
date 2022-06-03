@@ -25,7 +25,7 @@ int main() {
             else
                 milCount[mil]++;
             
-            if(milIndex == -1 || milCount[mil] > milCount[maxIndex])
+            if(maxIndex == -1 || milCount[mil] > milCount[maxIndex])
                 maxIndex = mil;
         }
         
