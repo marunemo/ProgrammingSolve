@@ -18,6 +18,8 @@ int main() {
 	
 	vector<vector<bool>> adjMatrix;
 	unordered_map<char, int> alphaIndex;
+	int propCount = 0;
+	
 	for(int i = 0; i < ALPHACOUNT; i++) {
 		alphaIndex[ALPHALIST[i]] = i;
 		adjMatrix.push_back(vector<bool>(ALPHACOUNT, false));
@@ -29,22 +31,28 @@ int main() {
 		cin.ignore(3);
 		cin >> q;
 		
-		adjMatrix[alphaIndex[p]][alphaIndex[q]] = true;
+		if(p != q && !adjMatrix[alphaIndex[p]][alphaIndex[q]]) {
+			adjMatrix[alphaIndex[p]][alphaIndex[q]] = true;
+			propCount++;
+		}
 	}
 	
 	// https://namu.wiki/w/%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%9B%8C%EC%85%9C%20%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98
 	for(int m = 0; m < ALPHACOUNT; m++) {
 		for(int s = 0; s < ALPHACOUNT; s++) {
 			for(int e = 0; e < ALPHACOUNT; e++) {
-				if(adjMatrix[s][m] && adjMatrix[m][e])
+				if(s != e && adjMatrix[s][m] && adjMatrix[m][e] && !adjMatrix[s][e]) {
 					adjMatrix[s][e] = true;
+					propCount++;
+				}
 			}
 		}
 	}
 	
+	cout << propCount << "\n";
 	for(int i = 0; i < ALPHACOUNT; i++) {
 		for(int j = 0; j < ALPHACOUNT; j++) {
-			if(i != j && adjMatrix[i][j])
+			if(adjMatrix[i][j])
 				cout << ALPHALIST[i] << " => " << ALPHALIST[j] << "\n";
 		}
 	}
