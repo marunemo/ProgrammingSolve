@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -14,7 +14,7 @@ int main() {
     int n;
     cin >> n;
     
-    vector<int> answer;
+    vector<string> answer;
     
     int ti;
     for(int i = 0; i < n; i++) {
@@ -22,30 +22,29 @@ int main() {
         
         unordered_map<int, int> milCount;
         int mil;
-        int maxIndex = -1;
+		bool isOccupied = false;
         for(int j = 0; j < ti; j++) {
             cin >> mil;
-            if(milCount.find(mil) == milCount.end())
-                milCount[mil] = 1;
-            else
-                milCount[mil]++;
-            
-            if(maxIndex == -1 || milCount[mil] > milCount[maxIndex])
-                maxIndex = mil;
+			
+			if(!isOccupied) {
+				if(milCount.find(mil) == milCount.end())
+					milCount[mil] = 1;
+				else
+					milCount[mil]++;
+
+				if(milCount[mil] > ti / 2) {
+					answer.push_back(to_string(mil));
+					isOccupied = true;
+				}
+			}
         }
         
-        if(milCount[maxIndex] > ti / 2)
-            answer.push_back(maxIndex);
-        else
-            answer.push_back(-1);
+        if(!isOccupied)
+            answer.push_back("SYJKGW");
     }
     
-    for(int i = 0; i < n; i++) {
-        if(answer[i] == -1)
-            cout << "SYJKGW\n";
-        else
-            cout << answer[i] << "\n";
-    }
+    for(int i = 0; i < n; i++)
+		cout << answer[i] << "\n";
     
     return 0;
 }
