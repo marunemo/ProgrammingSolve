@@ -44,7 +44,7 @@ int main() {
 	
 	for(int i = 0; i < ALPHACOUNT; i++) {
 		for(int j = 0; j < ALPHACOUNT; j++) {
-			if(adjMatrix[i][j])
+			if(i != j && adjMatrix[i][j])
 				cout << ALPHALIST[i] << " => " << ALPHALIST[j] << "\n";
 		}
 	}
