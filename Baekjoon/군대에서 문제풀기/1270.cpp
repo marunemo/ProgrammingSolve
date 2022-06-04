@@ -20,8 +20,8 @@ int main() {
     for(int i = 0; i < n; i++) {
         cin >> ti;
         
-        unordered_map<int, int> milCount;
-        int mil;
+        unordered_map<long long, int> milCount;
+        long long mil;
 		bool isOccupied = false;
         for(int j = 0; j < ti; j++) {
             cin >> mil;
@@ -38,9 +38,9 @@ int main() {
 				}
 			}
         }
-        
-        if(!isOccupied)
-            answer.push_back("SYJKGW");
+
+		if(!isOccupied)
+			answer.push_back("SYJKGW");
     }
     
     for(int i = 0; i < n; i++)
