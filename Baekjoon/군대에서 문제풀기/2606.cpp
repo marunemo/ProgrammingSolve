@@ -28,9 +28,11 @@ int main() {
 	
 	// Floyd-Warshall algorithm
 	for(int m = 0; m < comCount; m++) {
-		for(int n = 0; n < comCount; n++) {
-			if(linkedNetwork[0][m] && linkedNetwork[m][n]) {
-				linkedNetwork[0][n] = true;
+		for(int s = 0; s < comCount; s++) {
+			for(int e = 0; e < comCount; e++) {
+				if(linkedNetwork[s][m] && linkedNetwork[m][e]) {
+					linkedNetwork[s][e] = true;
+				}
 			}
 		}
 	}
