@@ -37,7 +37,7 @@ int main() {
 	
 	for(int i = 0; i < nodeCount; i++) {
 		for(int j = 0; j < nodeCount; j++) {
-			if(adjMatrix[i][j] > 100000)
+			if(adjMatrix[i][j] >= (1 << 20))
 				cout << 0 << " ";
 			else
 				cout << adjMatrix[i][j] << " ";
