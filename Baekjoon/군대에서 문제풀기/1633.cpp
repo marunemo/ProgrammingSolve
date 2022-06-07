@@ -21,12 +21,11 @@ int bestTeamMaker(int teamStat[][16][16], int playerStat[][2], int maxPlayerInde
 	}
 	
 	int tempStat = 0;
-	int maxStat = 0;
 	
 	// 백으로 플레이하는 인원이 15명 이하라면 현재 인덱스의 인원이 백으로 플레이하는 경우 계산
 	if(white < 15) {
 		tempStat = bestTeamMaker(teamStat, playerStat, maxPlayerIndex, playerIndex + 1, white + 1, black) + playerStat[playerIndex][0];
-		if(tempStat > maxStat)
+		if(tempStat > teamStat[playerIndex][white][black])
 			teamStat[playerIndex][white][black] = tempStat;
 	}
 	// 흑으로 플레이하는 인원이 15명 이하라면 현재 인덱스의 인원이 흑으로 플레이하는 경우 계산
@@ -70,8 +69,6 @@ int main() {
 				teamStat[i][j][k] = 0;
 		}
 	}
-	
-	cout << "TEMP" << endl;
 	
 	cout << bestTeamMaker(teamStat, playerStat, playerIndex, 0, 0, 0) << endl;
 	
