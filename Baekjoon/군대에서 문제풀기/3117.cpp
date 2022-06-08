@@ -2,12 +2,42 @@
 
 using namespace std;
 
+void sparseTable(int currentVideo[], int nextVideo[], int &time, int due, int n, int k, int m) {
+	if(m <= due)
+		return;
+	
+	if(due == 0) {
+		sparseTable(currentVideo, nextVideo, time, 1, n, k, m);
+		while(time < m) {
+			for(int i = 0; i < n; i++) {
+				currentVideo[i] = nextVideo[currentVideo[i]];
+			}
+			time++;
+		}
+	}
+	else {
+		int jumpVideo[100000];
+		for(int i = 0; i < k; i++) {
+			jumpVideo[i] = nextVideo[nextVideo[i]];
+		}
+
+		sparseTable(currentVideo, jumpVideo, time, due * 2, n, k, m);
+		while(time <= m - due) {
+			for(int i = 0; i < n; i++) {
+				currentVideo[i] = jumpVideo[currentVideo[i]];
+			}
+			time += due;
+		}
+	}
+}
+
 int main() {
 	int n, k, m;
 	cin >> n >> k >> m;
 	
 	int currentVideo[100000];
 	int nextVideo[100000];
+	int time = 0;
 	
 	for(int i = 0; i < n; i++) {
 		int videoChannel;
@@ -26,11 +56,7 @@ int main() {
 	}
 	
 	// 처음 보는 비디오 재생 시간 1분 감산
-	for(long long t = 0; t < m - 1; t++) {
-		for(int i = 0; i < n; i++) {
-			currentVideo[i] = nextVideo[currentVideo[i]];
-		}
-	}
+	sparseTable(currentVideo, nextVideo, time, 0, n, k, m - 1);
 	
 	for(int i = 0; i < n; i++) {
 		// 인덱스를 서수대로 출력
